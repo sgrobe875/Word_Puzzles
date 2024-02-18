@@ -29,6 +29,7 @@ import requests
 import datetime
 import re
 import os
+import json
 from collections import Counter
 
 
@@ -111,9 +112,33 @@ def clean_and_build_file():
         
     
     
+# Similar to the function above, this function is really only needed the first time, or any time you wish to 
+# reset or overwrite the list of word frequencies; leaving this function here for reference
+def build_and_export_frequencies():
+    # read in the list of words and their frequencies
+    freq_df = pd.read_csv('ngram_freq.csv')
+    
+    # now limit to just reasonably popular words (> 100000 uses)
+    freq_df = freq_df[freq_df['count'] > 100000]
+    
+    # now create a dictionary in the format {word:frequency}
+    word_freqs = {}
+    
+    # begin by looping through each row of the dataframe
+    for r in range(len(freq_df)):
+        # add to dictionary using the word as the key and the count as the value
+        word_freqs[freq_df.iloc[r]['word']] = int(freq_df.iloc[r]['count'])
+        
+    # save the dictionary as a json file so we don't have to build the dictionary every time
+    with open("word_freqs.json", "w") as outfile: 
+        json.dump(word_freqs, outfile)
+    
+    
 # only call this function to reset the data set of one grams! Otherwise, leave it commented out
 # clean_and_build_file()
 
+# only call this function to reset the data set of word frequencies; otherwise, leave it commented out
+# build_and_export_frequencies()
 
 
 # read in data set of one-grams
@@ -126,21 +151,8 @@ words = list(data.iloc[:,0])
 words = [str(word) for word in words]
 
 
-
-# read in the list of words and their frequencies
-freq_df = pd.read_csv('ngram_freq.csv')
-
-# now limit to just reasonably popular words (> 100000 uses)
-freq_df = freq_df[freq_df['count'] > 100000]
-
-# now create a dictionary in the format {word:frequency}
-word_freqs = {}
-
-# begin by looping through each row of the dataframe
-for r in range(len(freq_df)):
-    # add to dictionary using the word as the key and the count as the value
-    word_freqs[freq_df.iloc[r]['word']] = freq_df.iloc[r]['count']
-
+# read in the json to get a dictionary of word frequencies; we'll use this later
+word_freqs = json.load(open('word_freqs.json'))
 
 
 
