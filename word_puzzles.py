@@ -2,8 +2,6 @@
 # Last updated February 2024
 
 
-
-
 # DIRECTIONS:
 # Click the "Run" button in the top right corner - it looks like a small arrow, like a "play" button
 # On the bottom of the screen, in the window labeled "Terminal," wait until you see the prompt "Type any word"
