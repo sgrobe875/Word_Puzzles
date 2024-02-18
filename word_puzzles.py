@@ -9,6 +9,10 @@
 # To run a search on another word, just repeat these steps!
 
 
+# As you're playing with this, please let me know about any changes I can make, including words/phrases you want to see added,
+# words/phrases you want removed, or any changes that would be helpful in how the output of the word lists are presented.
+
+
 # This script takes in a word as user input and returns a list of words (one-grams) and two-word phrases (two-grams)
 # that either start or end with the user's word, provided that the remained of the one- or two-gram is also a valid word.
 # Words are validated using both online and locally stored data sources.
@@ -280,8 +284,8 @@ if valid_search:
     print()
     
     # table header
-    print('At the end (%-32s              At the beginning (%-16s' % (str(len(ending)) + ' results)', str(len(starting)) + ' results)'))
-    print('-------------------------------------------------------------------------------------------------')
+    print('At the end (%-34s              At the beginning (%-16s' % (str(len(ending)) + ' results)', str(len(starting)) + ' results)'))
+    print('---------------------------------------------------------------------------------------------------')
     
     # show lists side by side, which means the number of rows in our table = length of the longer list (starting vs. ending)
     for i in range(max(len(starting), len(ending))):
@@ -314,15 +318,15 @@ if valid_search:
         # when we're out of words in the first column, but still have words to print in the second
         # column; avoids printing the arrow between the blank spaces
         if len(w1) == 0 and len(w2) == 0:
-            print('%-12s       %-38s %-20s -->   %-15s' % (w1, w2, w3, w4))
+            print('%-14s       %-38s %-20s -->   %-15s' % (w1, w2, w3, w4))
         
         # same as above, but for when we have something to print in the first column but not the second
         elif len(w3) == 0 and len(w4) == 0:
-            print('%-12s -->   %-38s'  % (w1, w2))
+            print('%-14s -->   %-38s'  % (w1, w2))
         
         # this is essentially the default: when we have an entry to print in both columns
         else:
-            print('%-12s -->   %-38s %-20s -->   %-15s' % (w1, w2, w3, w4))
+            print('%-14s -->   %-38s %-20s -->   %-15s' % (w1, w2, w3, w4))
     
     
     
