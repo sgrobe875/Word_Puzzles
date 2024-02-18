@@ -20,7 +20,7 @@
 
 # Baseline one-grams data set courtesy of Manas Sharma: https://www.bragitoff.com/2016/03/english-dictionary-in-csv-format/
 # Two-grams and additional one-grams from the free dictionary: https://www.thefreedictionary.com/s/ and https://www.thefreedictionary.com/e/
-# (Not yet implemented) Word frequencies from Kaggle/Google Books Ngram Viewer: https://www.kaggle.com/datasets/wheelercode/english-word-frequency-list?resource=download
+# Word frequencies from Kaggle/Google Books Ngram Viewer: https://www.kaggle.com/datasets/wheelercode/english-word-frequency-list?resource=download
 
 
 # import necessary packages
@@ -124,6 +124,24 @@ words = list(data.iloc[:,0])
 
 # ensure everything was read in as a string
 words = [str(word) for word in words]
+
+
+
+# read in the list of words and their frequencies
+freq_df = pd.read_csv('ngram_freq.csv')
+
+# now limit to just reasonably popular words (> 100000 uses)
+freq_df = freq_df[freq_df['count'] > 100000]
+
+# now create a dictionary in the format {word:frequency}
+word_freqs = {}
+
+# begin by looping through each row of the dataframe
+for r in range(len(freq_df)):
+    # add to dictionary using the word as the key and the count as the value
+    word_freqs[freq_df.iloc[r]['word']] = freq_df.iloc[r]['count']
+
+
 
 
 # get input from the user for the word of interest
