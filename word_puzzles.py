@@ -27,8 +27,20 @@
 import pandas as pd
 import requests
 import datetime
-from collections import Counter
 import re
+import os
+from collections import Counter
+
+
+# clear the contents of the terminal at the start of each run, to help keep things easy to read
+os.system('clear')
+
+
+# set the working directory to be wherever this file is stored
+# as long as one_grams.csv is stored in the same location as this file, we will never encounter a FileNotFound error 
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 
 
@@ -337,6 +349,9 @@ if valid_search:
     words_df.to_csv('one_grams.csv', index=False)
 
 
+
+# to help keep the console clean and easy to read, print a few newlines at the end
+print('\n\n')
 
 
 
