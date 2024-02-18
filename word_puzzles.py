@@ -13,8 +13,9 @@
 # words/phrases you want removed, or any changes that would be helpful in how the output of the word lists are presented.
 
 
+# SUMMARY:
 # This script takes in a word as user input and returns a list of words (one-grams) and two-word phrases (two-grams)
-# that either start or end with the user's word, provided that the remained of the one- or two-gram is also a valid word.
+# that either start or end with the user's word, provided that the remainder of the one- or two-gram is also a valid word.
 # Words are validated using both online and locally stored data sources.
 
 
@@ -38,7 +39,7 @@ os.system('clear')
 
 
 # set the working directory to be wherever this file is stored
-# as long as one_grams.csv is stored in the same location as this file, we will never encounter a FileNotFound error 
+# as long as necessary data files are stored in the same location as this file, we will never encounter a FileNotFound error 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
@@ -134,12 +135,24 @@ def build_and_export_frequencies():
         json.dump(word_freqs, outfile)
     
     
+    
+    
+    
+    
+
+#### MAIN #################################################################################################################
+    
+
+#### Call above functions, if necessary ####
+    
 # only call this function to reset the data set of one grams! Otherwise, leave it commented out
 # clean_and_build_file()
 
 # only call this function to reset the data set of word frequencies; otherwise, leave it commented out
 # build_and_export_frequencies()
 
+
+#### Read in and manipulate data files ####
 
 # read in data set of one-grams
 data = pd.read_csv('one_grams.csv')
@@ -155,6 +168,8 @@ words = [str(word) for word in words]
 word_freqs = json.load(open('word_freqs.json'))
 
 
+#### User input #####
+
 
 # get input from the user for the word of interest
 user_word = input("\nType any word: ")
@@ -164,7 +179,7 @@ user_word = user_word.lower()
 
 
 
-#### WEB SCRAPING! ####
+#### Web scraping! ####
 
 
 # First, scrape for one-grams that aren't in our existing data set plus two-grams that START with the word
@@ -252,11 +267,12 @@ if valid_search:
     
     # otherwise, workflow is identical to above
     
+    # get the HTML from the page
     page = requests.get(URL)
     text = page.text
     
     
-    
+    # find beginning and end of the suggestions in same manner as above
     start_index = [m.start() for m in re.finditer('class=suggestions', text)][0]
     last = [m.start() for m in re.finditer('class=suggestions', text)][-1]
     
@@ -267,18 +283,20 @@ if valid_search:
             end_index = i
             break
     
+    # use the indicies found above to collect all suggestions, clean them, and store in a list
     results = re.findall(r'">.*?</a>', text[start_index:end_index])
     
     cleaned_results = [result[2:-4].lower() for result in results]
     
     
-    
+    # empty list to store our relevant two-grams
     two_grams_end = []
     
     
     
     # loop through all cleaned results
     for result in cleaned_results:
+        # ignore those containing punctuation
         if '-' not in result and '(' not in result and ',' not in result:
             split_words = result.split(' ')
             # if one-gram, check if in the one-grams list already
@@ -299,6 +317,7 @@ if valid_search:
             # if > two-gram, skip
     
     
+    #### Combine and organize results for the user ####
     
     
     # list of all one-grams that start wtih user_word AND the remainder of the one_gram is also in the list
@@ -310,6 +329,9 @@ if valid_search:
     starting = starting + two_grams_start
     
     
+    ##### SORT BY FREQUENCIES HERE #####
+    
+    
     # same workflow as above for one-grams ending with our word
     ending = [word for word in words if (len(word) > len(user_word) and user_word == word[-len(user_word):]
                                           and word[:-len(user_word)] in words)]
@@ -318,7 +340,10 @@ if valid_search:
     ending = ending + two_grams_end
     
     
-    ### Print the results to the console ###
+    ##### SORT BY FREQUENCIES HERE #####
+    
+    
+    #### Print the finalized results to the console ####
     
     # start with displaying the user's word
     print()
