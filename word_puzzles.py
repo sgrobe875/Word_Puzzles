@@ -119,8 +119,8 @@ def build_and_export_frequencies():
     # read in the list of words and their frequencies
     freq_df = pd.read_csv('ngram_freq.csv')
     
-    # now limit to just reasonably popular words (> 100000 uses)
-    freq_df = freq_df[freq_df['count'] > 100000]
+    # now limit to just reasonably popular words (> 1000 uses)
+    freq_df = freq_df[freq_df['count'] > 1000]
     
     # now create a dictionary in the format {word:frequency}
     word_freqs = {}
@@ -149,7 +149,7 @@ def build_and_export_frequencies():
 # clean_and_build_file()
 
 # only call this function to reset the data set of word frequencies; otherwise, leave it commented out
-# build_and_export_frequencies()
+build_and_export_frequencies()
 
 
 #### Read in and manipulate data files ####
