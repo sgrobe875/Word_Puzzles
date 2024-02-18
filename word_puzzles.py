@@ -5,7 +5,7 @@
 # DIRECTIONS:
 # Click the "Run" button in the top right corner - it looks like a small arrow, like a "play" button
 # On the bottom of the screen, in the window labeled "Terminal," wait until you see the prompt "Type any word"
-# Type a word to the right of the prompt and hit the return/enter key. Be sure not to add any spaces or punctuation
+# Click to the right of the prompt, type a word, and hit the return/enter key. Be sure not to add any spaces or punctuation
 # To run a search on another word, just repeat these steps!
 
 
