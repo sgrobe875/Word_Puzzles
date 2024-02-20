@@ -35,7 +35,7 @@ from collections import Counter
 
 
 # clear the contents of the terminal at the start of each run, to help keep things easy to read
-# os.system('clear')    temporarily commenting this line out to help with debugging
+os.system('clear') 
 
 
 # set the working directory to be wherever this file is stored
@@ -149,7 +149,7 @@ def build_and_export_frequencies():
 # clean_and_build_file()
 
 # only call this function to reset the data set of word frequencies; otherwise, leave it commented out
-build_and_export_frequencies()
+# build_and_export_frequencies()
 
 
 #### Read in and manipulate data files ####
@@ -336,12 +336,24 @@ if valid_search:
     
     # loop through each word in our starting list
     for word in starting:
-        # try to pull the word's frequency from the dictionary and add to our list of counts
-        try:
-            starting_counts.append(word_freqs[word])
-        # if we don't have a frequency available, just append a zero
-        except KeyError:
-            starting_counts.append(0)
+        # start by checking if it's a two-gram
+        if ' ' in word:
+            # if it is, grab the frequency of the non-user word (in this case, the second word)
+            try:
+                word_split = word.split(' ')
+                starting_counts.append(word_freqs[word_split[1]])
+            # if the frequency is not available, just append a zero
+            except KeyError:
+                starting_counts.append(0)
+                
+        # if no space, then it must be a one-gram
+        else:
+            # try to get the frequency of the word directly
+            try:
+                starting_counts.append(word_freqs[word])
+            # if we don't have a frequency available, just append a zero
+            except KeyError:
+                starting_counts.append(0)
     
     # create a dataframe from the two lists
     starting_df = pd.DataFrame({'word':starting, 'counts':starting_counts})
@@ -369,12 +381,24 @@ if valid_search:
     
     # loop through each word in our ending list
     for word in ending:
-        # try to pull the word's frequency from the dictionary and add to our list of counts
-        try:
-            ending_counts.append(word_freqs[word])
-        # if we don't have a frequency available, just append a zero
-        except KeyError:
-            ending_counts.append(0)
+        # check if two-gram
+        if ' ' in word:
+            # if it is, grab the frequency of the non-user word (in this case, the first word)
+            try: 
+                word_split = word.split(' ')
+                ending_counts.append(word_freqs[word_split[0]])
+            # if the frequency is not available, just append a zero
+            except KeyError:
+                ending_counts.append(0)
+        
+        # otherwise must be a one-gram
+        else:
+            # try to pull the word's frequency from the dictionary and add to our list of counts
+            try:
+                ending_counts.append(word_freqs[word])
+            # if we don't have a frequency available, just append a zero
+            except KeyError:
+                ending_counts.append(0)
     
     # create a dataframe from the two lists
     ending_df = pd.DataFrame({'word':ending, 'counts':ending_counts})
