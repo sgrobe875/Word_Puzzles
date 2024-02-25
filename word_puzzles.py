@@ -179,6 +179,31 @@ user_word = user_word.lower()
 
 
 
+# manual tweaks to the word list
+# probably overkill, but we'll just make these checks every time we run the script to be safe
+
+# words that we noticed are not in the word list that we would like added
+add_words = ['gam']
+
+# words that should never be added to the word list, and should be removed if they are already present
+blacklisted_words = []
+
+
+# loop through the words to add; add to the word list if not already present
+for add_word in add_words:
+    if add_word not in words:
+        words.append(add_word)
+        
+        
+# loop through blacklisted words; if present in the word list, remove them
+for blacklisted_word in blacklisted_words:
+    if blacklisted_word in words:
+        words.remove(blacklisted_word)
+
+
+# now we can move on to getting results!
+
+
 #### Web scraping! ####
 
 
@@ -331,6 +356,12 @@ if valid_search:
     starting = starting + two_grams_start
     
     
+    # clear starting list of any of our blacklisted words
+    for blacklisted_word in blacklisted_words:
+        if blacklisted_word in starting:
+            starting.remove(blacklisted_word)
+    
+    
     # build a dataframe of starting words and their frequencies; we'll use this to sort them
     starting_counts = []
     
@@ -374,6 +405,12 @@ if valid_search:
     
     # append the list of two-grams ending with our word
     ending = ending + two_grams_end
+    
+    
+    # clear starting list of any of our blacklisted words
+    for blacklisted_word in blacklisted_words:
+        if blacklisted_word in ending:
+            ending.remove(blacklisted_word)
     
     
     # build a dataframe of ending words and their frequencies; we'll use this to sort them
@@ -464,6 +501,11 @@ if valid_search:
             print('%-14s -->   %-38s %-20s -->   %-15s' % (w1, w2, w3, w4))
     
     
+    
+    # one last check to clean out any blacklisted words before we export to a file
+    for blacklisted_word in blacklisted_words:
+        if blacklisted_word in words:
+            words.remove(blacklisted_word)
     
     
     
