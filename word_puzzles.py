@@ -237,18 +237,23 @@ URL = 'https://www.thefreedictionary.com/s/' + user_word
 page = requests.get(URL)
 text = page.text
 
-# flag for whether the user entered a valid word
+# flag for whether the user entered a valid word; assume valid until proven otherwise
 valid_search = True
+
+# if a space is present, set search to invalid
+if ' ' in user_word:
+    valid_search = False
+
 try:
     # "class=suggestions" within the ul html elements is indicative solely of the dictionary results
     # find the first instance of this (aka the beginning of the results)
     start_index = [m.start() for m in re.finditer('class=suggestions', text)][0]
     
 # if we get an IndexError here, it means the word was not found on the free dictionary (i.e., it is not valid)
-# change the valid_search flag to False, and print to the user that their search didn't work
+# change the valid_search flag to False
 except IndexError:
     valid_search = False
-    print('\nNo matches found! Double check that you\'ve entered a valid word and try again.')
+    
     
 # if the word was determined to be invalid above, stop here; if it's valid, proceed with the rest of the script
 if valid_search:
@@ -548,6 +553,12 @@ if valid_search:
     words_df = pd.DataFrame(words)
     words_df.to_csv('one_grams.csv', index=False)
 
+
+
+# only reach this point if the user's word was invalid; print message to the console
+else:
+    print('\nNo matches found! Double check that you\'ve entered a valid word and try again.')
+    print('Remember not to include any punctuation or spaces!')
 
 
 # to help keep the console clean and easy to read, print a few newlines at the end
