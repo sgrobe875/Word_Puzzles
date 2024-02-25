@@ -152,6 +152,10 @@ def build_and_export_frequencies():
 # build_and_export_frequencies()
 
 
+
+
+
+
 #### Read in and manipulate data files ####
 
 # read in data set of one-grams
@@ -168,6 +172,10 @@ words = [str(word) for word in words]
 word_freqs = json.load(open('word_freqs.json'))
 
 
+
+
+
+
 #### User input #####
 
 
@@ -179,8 +187,14 @@ user_word = user_word.lower()
 
 
 
-# manual tweaks to the word list
-# probably overkill, but we'll just make these checks every time we run the script to be safe
+
+
+ 
+#### Manual tweaks to the word list ####
+
+
+# probably overkill since these changes will always be saved to a file at the end of each run, but to
+# be safe, we'll just make these checks every time we run the script
 
 # words that we noticed are not in the word list that we would like added
 add_words = ['gam']
@@ -204,8 +218,15 @@ for blacklisted_word in blacklisted_words:
 # now we can move on to getting results!
 
 
+
+
+
+
 #### Web scraping! ####
 
+
+
+## Get starting words ##
 
 # First, scrape for one-grams that aren't in our existing data set plus two-grams that START with the word
 
@@ -284,6 +305,8 @@ if valid_search:
             
         
         
+    ## Get ending words ##
+        
     # repeat the above, but now for two-grams that END with the word
     
     
@@ -340,12 +363,16 @@ if valid_search:
     
     
             # if > two-gram, skip
+            
+            
+            
+            
     
     
     #### Combine and organize results for the user ####
     
     
-    ## Words that START with the user's word
+    ## Words that START with the user's word ##
     
     # list of all one-grams that start wtih user_word AND the remainder of the one_gram is also in the list
     # of acceptable one-grams
@@ -448,6 +475,9 @@ if valid_search:
     
     
     
+    
+    
+    
     #### Print the finalized results to the console ####
     
     # start with displaying the user's word
@@ -501,6 +531,11 @@ if valid_search:
             print('%-14s -->   %-38s %-20s -->   %-15s' % (w1, w2, w3, w4))
     
     
+    
+    
+    
+    
+    #### Last check and save final results ####
     
     # one last check to clean out any blacklisted words before we export to a file
     for blacklisted_word in blacklisted_words:
