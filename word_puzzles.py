@@ -379,7 +379,7 @@ if valid_search:
     
     ## Words that START with the user's word ##
     
-    # list of all one-grams that start wtih user_word AND the remainder of the one_gram is also in the list
+    # list of all one-grams that start with user_word AND the remainder of the one_gram is also in the list
     # of acceptable one-grams
     starting = [word for word in words if (len(word) > len(user_word) and user_word == word[:len(user_word)]
                                             and word[len(user_word):] in words)]
@@ -422,10 +422,36 @@ if valid_search:
     starting_df = pd.DataFrame({'word':starting, 'counts':starting_counts})
     
     # sort the dataframe by counts (descending)
-    starting_df = starting_df.sort_values('counts', ascending = False)
+    starting_df_counts = starting_df.sort_values('counts', ascending = False)
+    
+    ## another version, sorted alphabetically
+
+    # start by creating another column for the dataframe for sorting
+    words_for_sorting = []
+    
+    # loop through each word in the results
+    for word in starting_df['word']:
+        # check if it has a space (aka, if it's a two-gram)
+        if ' ' in word:
+            # if it is, split and rebuild the word without the space
+            word_split = word.split(' ')
+            fixed_word = word_split[0] + word_split[1]
+            
+            # add to the list
+            words_for_sorting.append(fixed_word)
+            
+        else:
+            # if it doesn't have a space, add it to the list as is
+            words_for_sorting.append(word)
+            
+    # add the list to the dataframe as a new column
+    starting_df['word for sorting'] = words_for_sorting
+    
+    # sort by the new column
+    starting_df_alpha = starting_df.sort_values('word for sorting', ascending = True)
     
     # overwrite the list of starting words to be this one that we just sorted
-    starting = list(starting_df['word'])
+    starting = list(starting_df_alpha['word'])
     
     
     
@@ -473,10 +499,36 @@ if valid_search:
     ending_df = pd.DataFrame({'word':ending, 'counts':ending_counts})
     
     # sort the dataframe by counts (descending)
-    ending_df = ending_df.sort_values('counts', ascending = False)
+    ending_df_counts = ending_df.sort_values('counts', ascending = False)
+    
+    ## another version, sorted alphabetically
+
+    # start by creating another column for the dataframe for sorting
+    words_for_sorting = []
+    
+    # loop through each word in the results
+    for word in ending_df['word']:
+        # check if it has a space (aka, if it's a two-gram)
+        if ' ' in word:
+            # if it is, split and rebuild the word without the space
+            word_split = word.split(' ')
+            fixed_word = word_split[0] + word_split[1]
+            
+            # add to the list
+            words_for_sorting.append(fixed_word)
+            
+        else:
+            # if it doesn't have a space, add it to the list as is
+            words_for_sorting.append(word)
+            
+    # add the list to the dataframe as a new column
+    ending_df['word for sorting'] = words_for_sorting
+    
+    # sort by the new column
+    ending_df_alpha = ending_df.sort_values('word for sorting', ascending = True)
     
     # overwrite the list of ending words to be this one that we just sorted
-    ending = list(ending_df['word'])
+    ending = list(ending_df_alpha['word'])
     
     
     
@@ -486,6 +538,9 @@ if valid_search:
     #### Print the finalized results to the console ####
     
     # start with displaying the user's word
+    print()
+    print()
+    print('Printing results ALPHABETICALLY:')
     print()
     print('Words with "' + user_word + '"')
     print()
