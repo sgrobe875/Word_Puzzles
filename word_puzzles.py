@@ -1,5 +1,5 @@
 # Created June 2023
-# Last updated February 2024
+# Last updated February 2025
 
 
 # DIRECTIONS:
@@ -540,7 +540,7 @@ if valid_search:
     # start with displaying the user's word
     print()
     print()
-    print('Printing results ALPHABETICALLY:')
+    print('Printing results alphabetically:')
     print()
     print('Words with "' + user_word + '"')
     print()
